@@ -79,12 +79,14 @@ class YdlPlugin(BeetsPlugin):
                 }]
             }
         }
-        self._config.update(self.config)
-        self.config = self._config
+        self.config.add(self._config)
 
         # be verbose if beets is verbose
-        if not self.config.get('verbose'):
+        if config['verbose'].get():
             self.config['verbose'] = True
+
+        self.config = self.config.flatten()
+
 
     def commands(self):
         outer_class = self
@@ -215,8 +217,7 @@ class YdlPlugin(BeetsPlugin):
         """
         print('[ydl] Processing item: ' + self.info.get('title'))
 
-        ext = self.config.get('youtubedl_options')\
-                ['postprocessors'][0]['preferredcodec']
+        ext = self.info['ext']
         self.audio_file = self.get_file_path(ext)
         self.outdir, self.audio_file_ext = os.path.splitext(self.audio_file)
         self.outdir = os.path.dirname(self.outdir)

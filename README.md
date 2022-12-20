@@ -1,4 +1,9 @@
-![Travis CI](https://api.travis-ci.org/vmassuchetto/beets-ydl.svg?branch=master)
+---
+note: |
+  "forked" from https://github.com/vmassuchetto/beets-ydl to resolve
+  `TypeError: ConfigView.get() takes from 1 to 2 positional arguments but 3
+  were given` and related config parsing errors (e.g., issues "#6", "#5").
+---
 
 # beets ydl
 
@@ -89,12 +94,12 @@ some basic ID3 tags to them, and finally run `beet import` on
   ```yaml
   ydl:
       youtubedl_options:
-          format: 'best',
+          format: 'best'
           postprocessors:
-              key: 'FFmpegExtractAudio'
-              preferredcodec: 'mp3'
-              preferredquality: '320'
-              nopostoverwrites: True
+              - key: 'FFmpegExtractAudio'
+                preferredcodec: 'mp3'
+                preferredquality: '320'
+                nopostoverwrites: True
   ```
 
   This can, however, end-up with unnecessarily big files that have 320kbps as a
