@@ -5,9 +5,9 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="beets-ydl",
-    version="0.0.4",
+    version="0.0.4.1",
     author="Vinicius Massuchetto",
-    description="Download audio from youtube-dl soures and import into beets",
+    description="Download audio from yt-dlp soures and import into beets",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/vmassuchetto/beets-ydl",
@@ -19,7 +19,7 @@ setuptools.setup(
     ],
     install_requires=[
         'beets',
-        'youtube-dl',
+        'yt-dlp',
         'pyxdg',
     ]
 )

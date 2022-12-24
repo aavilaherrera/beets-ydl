@@ -19,7 +19,7 @@ from optparse import OptionParser
 from pathlib import Path
 from shutil import copyfile
 from xdg import BaseDirectory
-from youtube_dl import YoutubeDL
+from yt_dlp import YoutubeDL
 from hashlib import md5
 import glob
 import json
@@ -217,8 +217,8 @@ class YdlPlugin(BeetsPlugin):
         """
         print('[ydl] Processing item: ' + self.info.get('title'))
 
-        ext = self.info['ext']
-        self.audio_file = self.get_file_path(ext)
+        ext = self.info['acodec']
+        self.audio_file = self.get_file_path(ext)  # [f['filepath'] for f in self.info['requested_downloads'] if 'filepath' in f]
         self.outdir, self.audio_file_ext = os.path.splitext(self.audio_file)
         self.outdir = os.path.dirname(self.outdir)
 

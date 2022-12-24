@@ -1,13 +1,19 @@
 ---
-note: |
-  "forked" from https://github.com/vmassuchetto/beets-ydl to resolve
-  `TypeError: ConfigView.get() takes from 1 to 2 positional arguments but 3
-  were given` and related config parsing errors (e.g., issues "#6", "#5").
+notes: |
+  "forked" from https://github.com/vmassuchetto/beets-ydl to resolve:
+
+  - `TypeError: ConfigView.get() takes from 1 to 2 positional arguments but 3 were
+    given` and related config parsing errors (e.g., issues "#6", "#5").
+  - Also uses `yt-dlp` instead of `yt-dlp`
+
+//TODO: |
+  update docs, setup.py, check license (MIT?), etc.., *complete rewrite?*
 ---
+
 
 # beets ydl
 
-Download audio from youtube-dl sources and import into beets
+Download audio from yt-dlp sources and import into beets
 
     $ beet ydl "https://www.youtube.com/watch?v=wW6ykueIhX8"
 
@@ -36,8 +42,8 @@ plugins: ydl
 ydl:
     download: True         # download files from sources after getting information,
     split_files: True       # try to split album files into separate tracks,
-    import: True           # import files on youtube-dl after downloading and splitting,
-    youtubedl_options: {}  # youtube-dl available options -- https://git.io/fN0c7
+    import: True           # import files on yt-dlp after downloading and splitting,
+    youtubedl_options: {}  # yt-dlp available options -- https://git.io/fN0c7
     urls: []               # list of default urls to download when no arguments are provided, you
                            # can provide a playlist to get checked every time
 ```
@@ -60,11 +66,11 @@ some basic ID3 tags to them, and finally run `beet import` on
 - Use a `.netrc` file to use your own YouTube playlists
 
   Security discussions apart, you can create a `~/.netrc` with credentials for
-  youtube-dl to read.
+  yt-dlp to read.
 
       machine youtube login somelogin@gmail.com password somepassword
 
-  Check [this entry](https://git.io/fN2TD) on youtube-dl docs for more
+  Check [this entry](https://git.io/fN2TD) on yt-dlp docs for more
   information.
 
   Like this, you can download private playlists or your subscriptions:
@@ -104,6 +110,28 @@ some basic ID3 tags to them, and finally run `beet import` on
 
   This can, however, end-up with unnecessarily big files that have 320kbps as a
   merely nominal quality. See [this discussion](https://askubuntu.com/q/634584).
+
+- (recommended) settings
+
+Hardcoding a `preferredcodec` (instead of "best") seems to force transcoding
+instead of simply extracting audio. yt-dlp by default already looks for the
+best available quality file. The best codec can be explicitly requested as
+below.
+
+_UNTESTED_: setting a human readable `outtmpl` might be helpful when bulk
+importing previously downloaded files as the auto-tagger might have trouble
+parsing the embedded metadata.
+
+```yaml
+ydl:
+    youtubedl_options:
+        outtmpl: ~/.config/beets/ydl-cache/%(playlist,title)#S/%(title)#S.%(ext)s
+        postprocessors:
+            - key: FFmpegExtractAudio
+              preferredcodec: best
+              preferredquality: null
+              nopostoverwrites: false
+```
 
 ## Development
 
